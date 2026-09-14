@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Painel</h2>
+<p>Bem-vindo ao sistema de estoque!</p>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <a class="btn btn-outline-primary w-100 mb-2" href="{{ url_for('categorias') }}">Categorias</a>
+    </div>
+    <div class="col-md-3">
+        <a class="btn btn-outline-primary w-100 mb-2" href="{{ url_for('produtos') }}">Produtos</a>
+    </div>
+    <div class="col-md-3">
+        <a class="btn btn-outline-primary w-100 mb-2" href="{{ url_for('entrada') }}">Entrada</a>
+    </div>
+    <div class="col-md-3">
+        <a class="btn btn-outline-primary w-100 mb-2" href="{{ url_for('saida') }}">Saída</a>
+    </div>
+    <div class="col-md-3">
+        <a class="btn btn-outline-primary w-100 mb-2" href="{{ url_for('consulta') }}">Consulta</a>
+    </div>
+</div>
+{% endblock %}

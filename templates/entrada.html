@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Entrada de Produtos</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Registrar Entrada</h5>
+        <form method="POST" class="row g-2">
+            <div class="col-md-6">
+                <label>Produto *</label>
+                <select name="produto_id" class="form-select" required>
+                    <option value="">Selecione...</option>
+                    {% for p in produtos %}
+                    <option value="{{ p.id }}">{{ p.nome }} (estoque: {{ p.quantidade }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Quantidade *</label>
+                <input type="number" name="quantidade" class="form-control" min="1" required>
+            </div>
+            <div class="col-md-4">
+                <label>Motivo *</label>
+                <select name="motivo" class="form-select" required>
+                    <option value="Compra">Compra</option>
+                    <option value="Devolução">Devolução</option>
+                    <option value="Ajuste de Estoque">Ajuste de Estoque</option>
+                    <option value="Transferência">Transferência</option>
+                    <option value="Produção">Produção</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>Fornecedor</label>
+                <input type="text" name="fornecedor" class="form-control" placeholder="Nome do fornecedor">
+            </div>
+            <div class="col-md-4">
+                <label>Documento / NF</label>
+                <input type="text" name="documento" class="form-control" placeholder="Nº da nota fiscal">
+            </div>
+            <div class="col-md-4">
+                <label>Custo Unitário (R$)</label>
+                <input type="number" step="0.01" name="custo_unitario" class="form-control" placeholder="0,00">
+            </div>
+            <div class="col-12 mt-3">
+                <button class="btn btn-success">Registrar Entrada</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h5>Últimas entradas</h5>
+<table class="table table-sm table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Qtd</th>
+            <th>Motivo</th>
+            <th>Fornecedor</th>
+            <th>Documento</th>
+            <th>Custo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in movimentacoes %}
+        <tr>
+            <td>{{ m.data.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ m.produto.nome }}</td>
+            <td><span class="badge bg-success">+{{ m.quantidade }}</span></td>
+            <td>{{ m.motivo or '-' }}</td>
+            <td>{{ m.fornecedor or '-' }}</td>
+            <td>{{ m.documento or '-' }}</td>
+            <td>{% if m.custo_unitario %}R$ {{ "%.2f"|format(m.custo_unitario) }}{% else %}-{% endif %}</td>
+            <td>
+                <a href="{{ url_for('excluir_movimentacao', id=m.id) }}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Excluir essa entrada? O estoque será estornado.')">Excluir</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center">Nenhuma entrada registrada.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Saída de Produtos</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Registrar Saída</h5>
+        <form method="POST" class="row g-2">
+            <div class="col-md-6">
+                <label>Produto *</label>
+                <select name="produto_id" class="form-select" required>
+                    <option value="">Selecione...</option>
+                    {% for p in produtos %}
+                    <option value="{{ p.id }}">{{ p.nome }} (estoque: {{ p.quantidade }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Quantidade *</label>
+                <input type="number" name="quantidade" class="form-control" min="1" required>
+            </div>
+            <div class="col-md-4">
+                <label>Motivo *</label>
+                <select name="motivo" class="form-select" required>
+                    <option value="Venda">Venda</option>
+                    <option value="Perda">Perda</option>
+                    <option value="Consumo Interno">Consumo Interno</option>
+                    <option value="Avaria">Avaria</option>
+                    <option value="Transferência">Transferência</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label>Destino / Cliente</label>
+                <input type="text" name="destino" class="form-control" placeholder="Para quem/onde foi">
+            </div>
+            <div class="col-12 mt-3">
+                <button class="btn btn-danger">Registrar Saída</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h5>Últimas saídas</h5>
+<table class="table table-sm table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Qtd</th>
+            <th>Motivo</th>
+            <th>Destino</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in movimentacoes %}
+        <tr>
+            <td>{{ m.data.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ m.produto.nome }}</td>
+            <td><span class="badge bg-danger">-{{ m.quantidade }}</span></td>
+            <td>{{ m.motivo or '-' }}</td>
+            <td>{{ m.destino or '-' }}</td>
+            <td>
+                <a href="{{ url_for('excluir_movimentacao', id=m.id) }}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Excluir essa saída? O estoque será estornado.')">Excluir</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center">Nenhuma saída registrada.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Consulta de Estoque</h2>
+
+<form method="GET" class="row g-2 mb-4">
+    <div class="col-md-6">
+        <input type="text" name="busca" class="form-control" placeholder="Buscar por nome..." value="{{ busca }}">
+    </div>
+    <div class="col-md-4">
+        <select name="categoria_id" class="form-select">
+            <option value="">Todas as categorias</option>
+            {% for c in categorias %}
+            <option value="{{ c.id }}" {% if cat_id|string == c.id|string %}selected{% endif %}>{{ c.nome }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">Filtrar</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Produto</th>
+            <th>Categoria</th>
+            <th>Qtd</th>
+            <th>Estoque mín.</th>
+            <th>Situação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in produtos %}
+        <tr class="{% if p.quantidade <= p.estoque_minimo %}table-danger{% endif %}">
+            <td>{{ p.nome }}</td>
+            <td>{{ p.categoria.nome if p.categoria else '-' }}</td>
+            <td>{{ p.quantidade }}</td>
+            <td>{{ p.estoque_minimo }}</td>
+            <td>
+                {% if p.quantidade <= p.estoque_minimo %}
+                    <span class="badge bg-danger">Baixo</span>
+                {% else %}
+                    <span class="badge bg-success">OK</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center">Nenhum produto encontrado.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

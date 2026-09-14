@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Editar Categoria</h2>
+
+<form method="POST" class="row g-3">
+    <div class="col-md-6">
+        <label>Nome</label>
+        <input type="text" name="nome" class="form-control" value="{{ categoria.nome }}" required>
+    </div>
+    <div class="col-12">
+        <button class="btn btn-primary">Salvar</button>
+        <a href="{{ url_for('categorias') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+{% endblock %}
