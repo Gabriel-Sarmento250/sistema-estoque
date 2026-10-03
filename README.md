@@ -61,7 +61,6 @@ Acesse em: `http://localhost:5000`
 
 Para testar o sistema, utilize as credenciais abaixo:
 
-| Campo | Valor |
 |-------|-------|
 | **E-mail** | `admin@admin.com` |
 | **Senha** | `123` |
